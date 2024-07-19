@@ -15,8 +15,8 @@ const zodObjectId = z.string().refine(
   }
 );
 
-const schema = z.object({
+const schemaId = z.object({
   id: zodObjectId,
 });
 
-export default schema;
+export default schemaId;

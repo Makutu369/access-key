@@ -34,8 +34,10 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(tokenPayload, process.env.USER_SECRET_KEY);
-
-  res.status(200).json({ token });
+  res
+    .status(200)
+    .setHeader("x-auth-token", token)
+    .json({ message: "Authenticated" });
 };
 
 export { login };

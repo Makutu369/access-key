@@ -14,7 +14,7 @@ dotenv.config();
  * 6. send response to user
  */
 
-const resetPasswordController = async (req, res) => {
+const resetPasswordRequest = async (req, res) => {
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({ message: "Invalid details" });
@@ -27,7 +27,7 @@ const resetPasswordController = async (req, res) => {
 
   const resetToken = jwt.sign({ email }, process.env.RESET_PASSWORD_KEY);
 
-  const resetLink = `${process.env.HOST_URL}/api/user/reset-password/${resetToken}`;
+  const resetLink = `${process.env.HOST_URL}/user/reset-password/confirm?token=${resetToken}`;
   //send mail
   const subject = "Reset Password";
   const title = `Dear ${email} tap on use the link below to reset password`;
@@ -36,4 +36,4 @@ const resetPasswordController = async (req, res) => {
   return res.status(200).json({ message: "Password reset link sent" });
 };
 
-export { resetPasswordController };
+export { resetPasswordRequest };

@@ -16,6 +16,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT;
 app.get("/", (req, res) => res.send("hello"));
-app.use("/api/user", user);
+app.use("/user", user);
 app.use("/", key);
 app.listen(PORT, () => console.log(`listening on http://localhost:${PORT}`));

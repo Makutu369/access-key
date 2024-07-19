@@ -12,8 +12,8 @@ dotenv.config();
  * 4. save password as hash in db
  */
 
-const verifyReset = async (req, res) => {
-  const { token } = req.params;
+const resetPasswordConfirm = async (req, res) => {
+  const { token } = req.query;
   console.log(token);
   if (!token) {
     return res.status(400).json({ message: "Invalid token" });
@@ -42,4 +42,4 @@ const verifyReset = async (req, res) => {
   }
 };
 
-export { verifyReset };
+export { resetPasswordConfirm };

@@ -1,5 +1,6 @@
 import { User } from "../../model/user.js";
 import { AccessKey } from "../../model/access_key.js";
+import schemaId from "../../utils/validate_id.js";
 /**
  * TODO :
  * 1. get user id
@@ -11,4 +12,15 @@ import { AccessKey } from "../../model/access_key.js";
  * -
  */
 
-const getAllKeysController = (req, res) => {};
+const getAllKeysController = async (req, res) => {
+  const { id } = req.params;
+  const result = schemaId.safeParse({ id });
+
+  if (!result.success)
+    return res.status(400).json({ message: "invalid user details" });
+
+  const keys = await AccessKey.find({ user: id });
+  res.status(200).json(keys);
+};
+
+export { getAllKeysController };

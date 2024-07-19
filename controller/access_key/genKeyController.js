@@ -1,7 +1,7 @@
 import { User } from "../../model/user.js";
 import { AccessKey } from "../../model/access_key.js";
 import crypto from "crypto";
-import schema from "../../utils/validate_id.js";
+import schemaId from "../../utils/validate_id.js";
 /**
  * TODO:
  * 1. check if user exists in database with id
@@ -43,7 +43,7 @@ const genKeyController = async (req, res) => {
   const { id } = req.params;
 
   //validate bson id to prevent unnecessary errors
-  const result = schema.safeParse({ id });
+  const result = schemaId.safeParse({ id });
   if (!result.success)
     return res.status(400).json({ message: "invalid details" });
 

@@ -31,14 +31,15 @@ const saveUser = async (email, password, role) => {
 
 const genVerificationLink = (email) => {
   const token = jwt.sign({ email }, process.env.EMAIL_PRIVATE_KEY);
-  const verificationLink = `${process.env.hostUrl}/api/user/verify-email?token=${token}`;
+  const verificationLink = `${process.env.HOST_URL}/user/verify-email?token=${token}`;
   return verificationLink;
 };
 
 //main function
 const register = async (req, res) => {
   //get user data
-  const { email, password, role } = req.body;
+  const role = "SchoolIT";
+  const { email, password } = req.body;
 
   //verify data from req.body
   if (!email || !password || !role)
