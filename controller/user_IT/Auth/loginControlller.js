@@ -28,6 +28,9 @@ const login = async (req, res) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
+  if (existingUser.verified === false)
+    return res.status(401).json({ message: "Email not verified" });
+
   const tokenPayload = {
     userId: existingUser._id,
     email: existingUser.email,
