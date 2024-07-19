@@ -17,24 +17,28 @@ const validateEmail = (email) => {
 };
 
 const keyStatusController = async (req, res) => {
-  const { email } = req.query;
-  console.log(email);
-  const isValidEmail = validateEmail(email);
-  console.log(isValidEmail);
-  if (isValidEmail == false)
-    return res.status(400).json({ message: "Invalid email" });
+  try {
+    const { email } = req.query;
+    console.log(email);
+    const isValidEmail = validateEmail(email);
+    console.log(isValidEmail);
+    if (isValidEmail == false)
+      return res.status(400).json({ message: "Invalid email" });
 
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-  const key = await AccessKey.findOne({ user: user._id });
+    const key = await AccessKey.findOne({ user: user._id });
 
-  if (!key) return res.status(404).json({ message: `Key not found`, user });
+    if (!key) return res.status(404).json({ message: `Key not found`, user });
 
-  if (key.status !== "active")
-    return res.status(404).json({ message: "no active key found" });
+    if (key.status !== "active")
+      return res.status(404).json({ message: "no active key found" });
 
-  res.status(200).json({ message: "key is active", key });
+    res.status(200).json({ message: "key is active", key });
+  } catch (error) {
+    res.status(500).json({ error: "internal server error" });
+  }
 };
 
 export { keyStatusController };
