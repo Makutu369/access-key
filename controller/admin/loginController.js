@@ -1,7 +1,7 @@
-import { User } from "../../model/user.js";
 import { validate } from "../../utils/validate.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { Admin } from "../../model/admin.js";
 dotenv.config();
 /**
  *
@@ -23,14 +23,14 @@ const loginController = async (req, res) => {
   if (validationError)
     return res.status(400).json({ error: validationError.message });
 
-  const user = await User.findOne({ email });
-  if (user.role !== "admin")
+  const admin = await Admin.findOne({ email });
+  if (admin.role !== "admin")
     return res.status(403).json({ error: "must be an admin" });
-  if (password !== user.password)
+  if (password !== admin.password)
     return res.status(401).json({ error: "Invalid password" });
 
   const token = jwt.sign(
-    { id: user._id, role: user.role },
+    { id: admin._id, role: admin.role },
     process.env.ADMIN_SECRET,
     { expiresIn: "30d" }
   );
