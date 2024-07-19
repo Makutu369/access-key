@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { validate } from "../../../utils/validate.js";
 import { User } from "../../../model/user.js";
-
+import bcrypt from "bcrypt";
 /**
  * TODO:
  * 1. Get user detail
@@ -13,20 +13,29 @@ import { User } from "../../../model/user.js";
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const error = validate(email, password);
-  if (error) return res.status(400).json({ message: "invalid user details" });
+  const validationError = validate(email, password);
 
-  const user = await User.find({ email });
+  if (validationError) {
+    return res.status(400).json({ message: "Invalid user details" });
+  }
 
-  if (!user)
-    return res.status(401).json({ message: "user already exist in databse" });
+  const existingUser = await User.findOne({ email });
 
-  const payload = {
-    userId: user._id,
-    email: user.email,
+  if (
+    !existingUser ||
+    !(await bcrypt.compare(password, existingUser.password))
+  ) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const tokenPayload = {
+    userId: existingUser._id,
+    email: existingUser.email,
   };
 
-  const token = jwt.sign(payload, process.env.userSecretKey);
+  const token = jwt.sign(tokenPayload, process.env.USER_SECRET_KEY);
+
+  res.status(200).json({ token });
 };
 
 export { login };

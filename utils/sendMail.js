@@ -19,13 +19,13 @@ const transport = nodemailer.createTransport({
 });
 
 //send mail function
-const sendMail = async (email, verificationLink) => {
-  const html = `<div><p>click on the link below to verify your account</p><a href=${verificationLink}>verify email</a></div>`;
+const sendMail = async (email, verificationLink, subject, title) => {
+  const html = `<div><p>${title}</p><a href=${verificationLink}>link</a></div>`;
 
   const mailOptions = {
     from: user,
     to: email,
-    subject: "verify you email address",
+    subject,
     html,
   };
   try {

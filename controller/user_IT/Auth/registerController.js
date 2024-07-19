@@ -30,8 +30,8 @@ const saveUser = async (email, password, role) => {
 };
 
 const genVerificationLink = (email) => {
-  const token = jwt.sign({ email }, process.env.emailPrivateKey);
-  const verificationLink = `${process.env.hostUrl}/verify-email?q=${token}`;
+  const token = jwt.sign({ email }, process.env.EMAIL_PRIVATE_KEY);
+  const verificationLink = `${process.env.hostUrl}/api/user/verify-email?token=${token}`;
   return verificationLink;
 };
 
@@ -57,10 +57,14 @@ const register = async (req, res) => {
   const verificationLink = genVerificationLink(email);
 
   //send mail
-  sendMail(email, verificationLink);
+  const title = `Dear ${email} verify  your email with the link below`;
+  const subject = "Email Verification";
+  sendMail(email, verificationLink, subject, title);
 
   //return a valid response to the user
-  return res.status(200).json({ msg: `user saved successfully`, email });
+  return res
+    .status(200)
+    .json({ msg: `user saved successfully verify email and password`, email });
 };
 
 export { register };

@@ -13,7 +13,7 @@ mongoose
 const app = express();
 app.use(express.json());
 
-const PORT = 5000 || process.env.PORT;
+const PORT = process.env.PORT;
 app.get("/", (req, res) => res.send("hello"));
-app.use("/api/users", user);
+app.use("/api/user", user);
 app.listen(PORT, () => console.log(`listening on http://localhost:${PORT}`));

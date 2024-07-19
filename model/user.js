@@ -5,6 +5,7 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ["SchoolIT", "Admin"], required: true },
   verified: { type: Boolean, default: false },
+  keys: [{ type: Schema.Types.ObjectId, ref: "AccessKey" }],
 });
 
 const User = model("User", userSchema);
