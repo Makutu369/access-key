@@ -1,6 +1,7 @@
 # Access-Key Manager for Micro Focus
 
 - Project by MAKUTU
+- Tech Stack used : Nodejs Express and MongoDb
 
 ## Routes
 
