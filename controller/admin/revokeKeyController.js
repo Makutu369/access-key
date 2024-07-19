@@ -1,6 +1,5 @@
 import { AccessKey } from "../../model/access_key.js";
 import schemaId from "../../utils/validate_id.js";
-
 const revokeKeyController = async (req, res) => {
   try {
     const { id } = req.params;

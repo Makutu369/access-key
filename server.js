@@ -11,11 +11,12 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("db connect success"))
   .catch((e) => console.log(e));
-
+//express setup
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT;
+//api routes
 app.get("/", (req, res) => res.send("hello"));
 app.use("/user", user);
 app.use("/admin", admin);

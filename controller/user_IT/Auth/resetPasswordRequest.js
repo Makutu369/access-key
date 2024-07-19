@@ -15,11 +15,13 @@ dotenv.config();
  */
 
 const resetPasswordRequest = async (req, res) => {
+  //get user email from request body
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({ message: "Invalid details" });
   }
 
+  //check if user exist in database
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(400).json({ message: "User not found" });
@@ -33,6 +35,7 @@ const resetPasswordRequest = async (req, res) => {
   const title = `Dear ${email} tap on use the link below to reset password`;
   await sendMail(email, resetLink, subject, title);
 
+  //return response to user
   return res.status(200).json({ message: "Password reset link sent" });
 };
 

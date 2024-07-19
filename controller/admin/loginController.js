@@ -29,9 +29,13 @@ const loginController = async (req, res) => {
   if (password !== user.password)
     return res.status(401).json({ error: "Invalid password" });
 
-  const token = jwt.sign({ id: user._id }, process.env.ADMIN_SECRET, {
-    expiresIn: "1h",
-  });
+  const token = jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.ADMIN_SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
 
   res
     .status(200)

@@ -13,14 +13,23 @@ import schemaId from "../../utils/validate_id.js";
  */
 
 const getAllKeysController = async (req, res) => {
-  const { id } = req.params;
-  const result = schemaId.safeParse({ id });
+  try {
+    //get user id from request
+    const user = req.user;
+    const id = user.id;
+    const result = schemaId.safeParse({ id });
 
-  if (!result.success)
-    return res.status(400).json({ message: "invalid user details" });
+    //validate user id to bson
+    if (!result.success)
+      return res.status(400).json({ message: "invalid user details" });
 
-  const keys = await AccessKey.find({ user: id });
-  res.status(200).json(keys);
+    //get all keys associated with user id
+    const keys = await AccessKey.find({ user: id });
+    res.status(200).json(keys);
+  } catch (error) {
+    //return any error to user
+    res.status(500).json({ error: "internal server error" });
+  }
 };
 
 export { getAllKeysController };

@@ -46,8 +46,8 @@ const register = async (req, res) => {
   if (user) return res.status(401).json({ msg: "user already exist" });
 
   //check for validity of data
-  const error = validate(email, password);
-  if (error) return res.status(401).json({ error });
+  const result = validate(email, password);
+  if (result) return res.status(401).json({ error: result.issues });
 
   //save user
   const savedUser = saveUser(email, password);

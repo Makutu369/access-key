@@ -8,6 +8,7 @@ import { AccessKey } from "../../model/access_key.js";
 
 const keyController = async (req, res) => {
   try {
+    //get all keys from schema
     const keys = await AccessKey.find();
     res.json(keys);
   } catch (err) {

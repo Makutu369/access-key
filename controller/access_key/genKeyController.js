@@ -11,11 +11,7 @@ import schemaId from "../../utils/validate_id.js";
  *
  */
 
-const generateUniqueKey = () => {
-  const randomBytes = crypto.randomBytes(16);
-  const hexString = randomBytes.toString("hex");
-  return hexString;
-};
+//generate new key to use
 const generateKey = () => {
   const randomBytes = crypto.randomBytes(16);
   const hexString = randomBytes.toString("hex");
@@ -27,6 +23,7 @@ const generateActiveKey = async (userId) => {
   const expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + 7);
 
+  //create key
   const key = new AccessKey({
     key: generateKey(),
     status: "active",
@@ -34,15 +31,19 @@ const generateActiveKey = async (userId) => {
     user: userId,
   });
 
-  await key.save();
-
-  return key;
+  //cath any error and log it
+  try {
+    await key.save();
+    return key;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const genKeyController = async (req, res) => {
-  const { id } = req.params;
-
+  const getUser = req.user;
   //validate bson id to prevent unnecessary errors
+  const id = getUser.id;
   const result = schemaId.safeParse({ id });
   if (!result.success)
     return res.status(400).json({ message: "invalid details" });
@@ -52,6 +53,7 @@ const genKeyController = async (req, res) => {
     return res.status(404).json({ message: "User not found" });
   }
 
+  //check if user has an active key
   const activeKey = await AccessKey.findOne({ user: id, status: "active" });
   if (activeKey) {
     return res.status(400).json({
@@ -61,10 +63,13 @@ const genKeyController = async (req, res) => {
   }
 
   const newKey = await generateActiveKey(id);
+
+  //add new key to user's keys
   user.keys.push(newKey._id);
   await user.save();
 
-  res.status(200).json({ key: newKey.key });
+  //return new key to user
+  res.status(200).json({ key: newKey.key, user: user.email });
 };
 
 export { genKeyController };
