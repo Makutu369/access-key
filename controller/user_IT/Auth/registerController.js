@@ -13,14 +13,13 @@ import jwt from "jsonwebtoken";
  * 6. send response to client
  */
 
-const saveUser = async (email, password, role) => {
+const saveUser = async (email, password) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const user = new User({
     email,
     password: hashedPassword,
-    role,
   });
 
   try {
@@ -38,11 +37,10 @@ const genVerificationLink = (email) => {
 //main function
 const register = async (req, res) => {
   //get user data
-  const role = "SchoolIT";
   const { email, password } = req.body;
 
   //verify data from req.body
-  if (!email || !password || !role)
+  if (!email || !password)
     return res.status(401).json({ message: "invalid details" });
   const user = await User.findOne({ email });
   if (user) return res.status(401).json({ msg: "user already exist" });
@@ -52,7 +50,7 @@ const register = async (req, res) => {
   if (error) return res.status(401).json({ error });
 
   //save user
-  const savedUser = saveUser(email, password, role);
+  const savedUser = saveUser(email, password);
 
   //get verification link
   const verificationLink = genVerificationLink(email);

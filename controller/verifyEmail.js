@@ -11,8 +11,8 @@ const verifyEmail = async (req, res) => {
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.EMAIL_PRIVATE_KEY);
-    const { email } = decodedToken;
+    const payload = jwt.verify(token, process.env.EMAIL_PRIVATE_KEY);
+    const { email } = payload;
 
     const updatedUser = await User.findOneAndUpdate(
       { email },
