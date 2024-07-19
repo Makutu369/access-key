@@ -17,7 +17,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT;
 //api routes
-app.get("/", (req, res) => res.send("hello"));
 app.use("/user", user);
 app.use("/admin", admin);
 app.use("/", key);

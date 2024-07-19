@@ -32,9 +32,7 @@ const loginController = async (req, res) => {
   const token = jwt.sign(
     { id: user._id, role: user.role },
     process.env.ADMIN_SECRET,
-    {
-      expiresIn: "1h",
-    }
+    { expiresIn: "30d" }
   );
 
   res

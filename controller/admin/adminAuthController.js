@@ -7,7 +7,7 @@ const adminAuthController = async (req, res, next) => {
       return res.status(403).json({ error: "Admin only" });
     next();
   } catch (error) {
-    return res.status(401).json({ error: "unauthorized" });
+    return res.status(401).json({ error: "unauthorized", err: error.message });
   }
 };
 

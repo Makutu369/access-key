@@ -15,13 +15,10 @@ dotenv.config();
 const resetPasswordConfirm = async (req, res) => {
   const { token } = req.query;
   console.log(token);
-  if (!token) {
-    return res.status(400).json({ message: "Invalid token" });
-  }
-
+  if (!token) return res.status(400).json({ message: "Invalid token" });
   try {
     const payload = jwt.verify(token, process.env.RESET_PASSWORD_KEY);
-    const { newPassword } = req.body;
+    const newPassword = req.body.password;
     const { email } = payload;
     const user = await User.findOneAndUpdate(
       { email },
