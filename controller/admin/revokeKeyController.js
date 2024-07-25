@@ -2,22 +2,26 @@ import { AccessKey } from "../../model/access_key.js";
 import schemaId from "../../utils/validate_id.js";
 const revokeKeyController = async (req, res) => {
   try {
-    const { id } = req.params;
-
+    const { key } = req.params;
     // validate bson id to prevent unnecessary errors
-    const result = schemaId.safeParse({ id });
-    if (!result.success) return res.status(400).json({ message: "invalid id" });
 
-    const key = await AccessKey.findById(id);
+    const keyData = await AccessKey.findOne({ key: key });
 
-    if (!key) {
+    if (!keyData) {
       return res.status(404).json({ message: "key not found" });
     }
 
-    key.status = "revoked";
+    if (keyData.status === "revoked")
+      return res.status(400).json({ message: "key is already revoked" });
 
-    await key.save();
-    res.status(200).json({ message: "key revoked successfully" });
+    keyData.status = "revoked";
+    await keyData.save();
+    res
+      .status(200)
+      .json({
+        message: "key revoked successfully",
+        data: { key: keyData.key, status: keyData.status },
+      });
   } catch (error) {
     res
       .status(500)

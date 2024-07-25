@@ -47,10 +47,10 @@
 #### Key Routes
 
 - for all key routes set Header first
-- header : { "x-auth-tokn" : YOUR_TOKEN}
+- header : { "x-auth-tokn" : YOUR_TOKEN }
 
 ```
-    GET : /get-keys
+    GET : /user/get-key
 
-    GET : /keys
+    GET : /user/keys
 ```

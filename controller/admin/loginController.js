@@ -1,6 +1,7 @@
 import { validate } from "../../utils/validate.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import { Admin } from "../../model/admin.js";
 dotenv.config();
 /**
@@ -20,14 +21,17 @@ const loginController = async (req, res) => {
   const { email, password } = req.body;
 
   const validationError = validate(email, password);
-  if (validationError)
-    return res.status(400).json({ error: validationError.message });
+  if (validationError) return res.status(400).json({ error: validationError });
 
   const admin = await Admin.findOne({ email });
+  if (!admin) return res.status(404).json({ error: "Admin not found" });
+  console.log(admin);
   if (admin.role !== "admin")
     return res.status(403).json({ error: "must be an admin" });
-  if (password !== admin.password)
-    return res.status(401).json({ error: "Invalid password" });
+
+  const isValidPassword = await bcrypt.compare(password, admin.password);
+  if (!isValidPassword)
+    return res.status(401).json({ error: "Invalid credentials" });
 
   const token = jwt.sign(
     { id: admin._id, role: admin.role },

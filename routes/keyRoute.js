@@ -4,7 +4,7 @@ import { getAllKeysController } from "../controller/access_key/getAllKeysControl
 import { authKeyController } from "../controller/access_key/authKeyController.js";
 const router = express.Router();
 
-router.get("/get-key", authKeyController, genKeyController);
-router.get("/keys", authKeyController, getAllKeysController);
+router.get("/user/get-key", authKeyController, genKeyController);
+router.get("/user/keys", authKeyController, getAllKeysController);
 
 export default router;
